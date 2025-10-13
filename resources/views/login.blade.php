@@ -394,7 +394,7 @@
 
   <!-- Footer -->
   <footer>
-    <p class="text-sm text-white">© 2025 UiTM. All rights reserved.</p>
+    <p class="text-sm text-white">© 2025 ITS NU Pekalongan. All rights reserved.</p>
   </footer>
 
   <script>
