@@ -4,19 +4,22 @@
 
 <x-header>Homepage</x-header>
 
-<body class="bg-gradient-to-b from-gray-50 to-gray-100">
-    <div id="toast" class="fixed bottom-6 right-6 z-50 hidden px-5 py-3 rounded-md shadow-lg text-white bg-green-600 transition-all duration-300">
-        <span id="toastMsg">Message here</span>
-    </div>
+<div id="toast" class="fixed bottom-6 right-6 z-50 hidden px-5 py-3 rounded-md shadow-lg text-white bg-green-600 transition-all duration-300">
+    <span id="toastMsg">Message here</span>
+</div>
 
+<x-info><x-icon></x-icon></x-info>
 
-    <x-info><x-icon></x-icon></x-info>
+<!-- Clear div to ensure proper spacing after fixed navbar -->
+<div class="h-24 md:h-32"></div>
 
+<!-- Main Content -->
+<div class="max-w-7xl mx-auto px-4 py-8">
     <!-- Hero Section -->
-    <div class="max-w-7xl mx-auto px-4 py-8">
+    <div class="">
         <div class="text-center mb-10">
             <h1 class="text-3xl md:text-2xl font-bold text-indigo-800 mb-4">ITS NU Pekalongan Lost & Found Portal</h1>
-            </p>
+            <p class="text-lg text-gray-600">Helping students find their lost belongings</p>
         </div>
 
         <!-- Map Section -->
@@ -126,7 +129,7 @@
                             <ul class="space-y-2 text-sm text-yellow-700">
                                 <li class="flex items-start">
                                     <svg class="h-5 w-5 text-green-500 mr-2" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor">
-                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                                        <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
                                     </svg>
                                     <span>Only post items you have genuinely found or lost</span>
                                 </li>
@@ -288,7 +291,8 @@
     </div>
 
     <!-- JavaScript -->
-    <script src="/js/leaflet.js"></script>
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css" />
+    <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
     <script src="/js/itempost.js"></script>
     <script>
         // Ethics Modal logic
@@ -350,9 +354,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            @if(session('image_labels'))
-                showAiOverrideModal();
-            @endif
+            // AI Override Popup logic handled in the initialization script
         });
 
         // Toast Function
@@ -381,68 +383,129 @@
             }
         });
 
-        // Google Maps Setup
+        // Leaflet Maps Setup
         let lostItemsMap, selectLocationMap, marker;
-        const defaultLocation = { lat: 6.448577537416546, lng: 100.28222320638474 };
-
+        const defaultLocation = [-6.9606152, 109.6386821];
+        
+        window.Laravel = {
+            mapItems: [],
+            hasImageLabels: false,
+            mapboxToken: "{{ env('MAPBOX_ACCESS_TOKEN', 'YOUR_MAPBOX_ACCESS_TOKEN_HERE') }}"
+        };
+        
         window.initMap = function() {
-            lostItemsMap = new google.maps.Map(document.getElementById("lostItemsMap"), {
-                center: defaultLocation,
-                zoom: 16,
-                mapTypeControl: false,
-                streetViewControl: false,
-                styles: [
-                    {
-                        featureType: "poi",
-                        elementType: "labels",
-                        stylers: [{ visibility: "off" }]
+            try {
+                // Initialize the main map for displaying lost/found items
+                lostItemsMap = L.map('lostItemsMap').setView(defaultLocation, 16);
+                
+                // Add Mapbox tiles
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+                    tileSize: 512,
+                    maxZoom: 18,
+                    zoomOffset: -1,
+                    id: 'mapbox/streets-v11',
+                    accessToken: window.Laravel.mapboxToken
+                }).addTo(lostItemsMap);
+
+                // Add markers for items
+                window.Laravel.mapItems.forEach(item => {
+                    if (item.latitude && item.longitude) {
+                        const markerIcon = L.icon({
+                            iconUrl: item.type === 'lost' 
+                                ? 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-red.png' 
+                                : 'https://raw.githubusercontent.com/pointhi/leaflet-color-markers/master/img/marker-icon-green.png',
+                            shadowUrl: 'https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.9.4/images/marker-shadow.png',
+                            iconSize: [25, 41],
+                            iconAnchor: [12, 41],
+                            popupAnchor: [1, -34],
+                            shadowSize: [41, 41]
+                        });
+                        
+                        const marker = L.marker([parseFloat(item.latitude), parseFloat(item.longitude)], {icon: markerIcon})
+                            .addTo(lostItemsMap)
+                            .bindPopup(`<b>${item.type.charAt(0).toUpperCase() + item.type.slice(1)} Item</b><br>${item.description}`);
                     }
-                ]
-            });
+                });
 
-            const items = @json($mapItems);
-            items.forEach(item => {
-                if (item.latitude && item.longitude) {
-                    new google.maps.Marker({
-                        position: { lat: parseFloat(item.latitude), lng: parseFloat(item.longitude) },
-                        map: lostItemsMap,
-                        icon: {
-                            url: item.type === 'lost'
-                                ? 'http://maps.google.com/mapfiles/ms/icons/red-dot.png'
-                                : 'http://maps.google.com/mapfiles/ms/icons/green-dot.png',
-                            scaledSize: new google.maps.Size(32, 32)
-                        }
+                // Initialize the location selection map
+                selectLocationMap = L.map('selectLocationMap').setView(defaultLocation, 15);
+                
+                // Add Mapbox tiles
+                L.tileLayer('https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token={accessToken}', {
+                    attribution: '© <a href="https://www.mapbox.com/about/maps/">Mapbox</a> © <a href="http://www.openstreetmap.org/copyright">OpenStreetMap</a> <strong><a href="https://www.mapbox.com/map-feedback/" target="_blank">Improve this map</a></strong>',
+                    tileSize: 512,
+                    maxZoom: 18,
+                    zoomOffset: -1,
+                    id: 'mapbox/streets-v11',
+                    accessToken: window.Laravel.mapboxToken
+                }).addTo(selectLocationMap);
+
+                // Add click handler for location selection
+                selectLocationMap.on('click', function(e) {
+                    if (marker) {
+                        selectLocationMap.removeLayer(marker);
+                    }
+                    
+                    marker = L.marker(e.latlng, {draggable: true}).addTo(selectLocationMap);
+                    document.getElementById("lat").value = e.latlng.lat.toFixed(6);
+                    document.getElementById("lng").value = e.latlng.lng.toFixed(6);
+                    
+                    // Add dragend handler
+                    marker.on('dragend', function(event) {
+                        const position = marker.getLatLng();
+                        document.getElementById("lat").value = position.lat.toFixed(6);
+                        document.getElementById("lng").value = position.lng.toFixed(6);
                     });
-                }
-            });
-
-            selectLocationMap = new google.maps.Map(document.getElementById("selectLocationMap"), {
-                center: defaultLocation,
-                zoom: 15,
-                mapTypeControl: false,
-                streetViewControl: false
-            });
-
-            selectLocationMap.addListener("click", (e) => {
-                if (marker) marker.setMap(null);
-                marker = new google.maps.Marker({
-                    position: e.latLng,
-                    map: selectLocationMap,
-                    draggable: true,
-                    animation: google.maps.Animation.DROP
                 });
-                document.getElementById("lat").value = e.latLng.lat().toFixed(6);
-                document.getElementById("lng").value = e.latLng.lng().toFixed(6);
-
-                marker.addListener('dragend', function(e) {
-                    document.getElementById("lat").value = e.latLng.lat().toFixed(6);
-                    document.getElementById("lng").value = e.latLng.lng().toFixed(6);
-                });
-            });
+            } catch (error) {
+                console.error('Error initializing maps:', error);
+                document.getElementById("lostItemsMap").innerHTML = `
+                    <div class="p-6 text-center">
+                        <div class="text-red-500 font-bold text-xl mb-2">Map Loading Error</div>
+                        <div class="text-gray-700 mb-4">Maps failed to load properly.</div>
+                        <div class="text-gray-600 text-sm mb-4">
+                            This usually happens when there's an issue with the mapping library or API key.
+                        </div>
+                        <div class="bg-green-50 border border-green-200 rounded-lg p-4 text-left mb-4">
+                            <div class="font-medium text-green-800 mb-2">Solution:</div>
+                            <div class="text-green-700 text-sm">
+                                Please make sure you have added your Mapbox access token to the environment variables.<br>
+                                Add MAPBOX_ACCESS_TOKEN=your_actual_mapbox_token to your .env file.
+                            </div>
+                        </div>
+                    </div>
+                `;
+            }
         }
+        
+        // Initialize maps when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate Laravel data object
+            window.Laravel.mapItems = JSON.parse(document.getElementById('map-data').getAttribute('data-items') || '[]');
+            window.Laravel.hasImageLabels = document.getElementById('map-data').getAttribute('data-has-labels') === 'true';
+            
+            if (typeof window.initMap === 'function') {
+                window.initMap();
+            }
+            
+            // AI Override Popup logic
+            if (window.Laravel.hasImageLabels) {
+                showAiOverrideModal();
+            }
+        });
+        
+        window.addEventListener('load', function() {
+            // Ensure maps are properly sized after all content loads
+            if (lostItemsMap) {
+                lostItemsMap.invalidateSize();
+            }
+            if (selectLocationMap) {
+                selectLocationMap.invalidateSize();
+            }
+        });
     </script>
-    <script async defer src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBI0IHdwGx4iXJoj_ODuaXpJWTfNe9U5bU&callback=initMap"></script>
-    <script src="https://developers.google.com/maps/documentation/javascript/examples/markerclusterer/markerclusterer.js"></script>
-</body>
+    <div id="map-data" data-items="@json($mapItems ?? [])" data-has-labels="{{ session('image_labels') ? 'true' : 'false' }}" style="display: none;"></div>
+</div>
 
 @endsection

@@ -49,6 +49,9 @@ class HomeController extends Controller
         $mapItems = Item::whereNotNull('latitude')
                         ->whereNotNull('longitude')
                         ->get();
+        
+        // Debug: Log map items count
+        \Log::info('Map items count: ' . $mapItems->count());
 
         return view('home', compact(
             'studentModel',
