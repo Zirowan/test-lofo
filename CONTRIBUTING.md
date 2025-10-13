@@ -2,6 +2,15 @@
 
 Thank you for your interest in contributing to the ITS NU Pekalongan Lost & Found System! We welcome contributions from the community to help improve and enhance this project.
 
+## Development Team
+
+This project was developed by:
+- **Ahsanu Rohmatika Taqwa**
+- **Hasan Mahfudh**
+- **Abiyyul Asyqor**
+
+As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
+
 ## Code of Conduct
 
 By participating in this project, you are expected to uphold our Code of Conduct. Please report unacceptable behavior to the project maintainers.

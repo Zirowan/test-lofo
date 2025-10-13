@@ -4,6 +4,20 @@
     "description": "A comprehensive Lost & Found system for ITS NU Pekalongan built with Laravel.",
     "keywords": ["laravel", "lost-and-found", "campus", "its-nu-pekalongan", "inventory"],
     "license": "MIT",
+    "authors": [
+        {
+            "name": "Ahsanu Rohmatika Taqwa",
+            "role": "Developer"
+        },
+        {
+            "name": "Hasan Mahfudh",
+            "role": "Developer"
+        },
+        {
+            "name": "Abiyyul Asyqor",
+            "role": "Developer"
+        }
+    ],
     "require": {
         "php": "^8.2",
         "google/cloud-vision": "1.4",

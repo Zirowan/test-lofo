@@ -7,6 +7,15 @@
 
 A comprehensive web application designed to help students and staff at ITS NU Pekalongan report, track, and recover lost or found items on campus. This system provides a user-friendly platform with features tailored to ensure transparency, ethical posting, and efficient item management.
 
+## 👥 Development Team
+
+This project was developed by:
+- **Ahsanu Rohmatika Taqwa**
+- **Hasan Mahfudh**
+- **Abiyyul Asyqor**
+
+As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
+
 ## 🌟 Key Features
 
 ### 🔐 Authentication & Authorization
@@ -182,6 +191,9 @@ This project is part of a Final Year Project (FYP) for ITS NU Pekalongan and is 
 - ITS NU Pekalongan Faculty and Staff
 - Google Cloud Platform for API services
 - Open Source Community for development tools and libraries
+- **Ahsanu Rohmatika Taqwa**, **Hasan Mahfudh**, and **Abiyyul Asyqor** - Development Team
+
+For a complete list of contributors, please see [AUTHORS.md](AUTHORS.md).
 
 ---
 
