@@ -4,8 +4,11 @@
 ![PHP](https://img.shields.io/badge/PHP-8.2+-777BB4?style=for-the-badge&logo=php)
 ![MySQL](https://img.shields.io/badge/MySQL-8.0+-4479A1?style=for-the-badge&logo=mysql)
 ![TailwindCSS](https://img.shields.io/badge/Tailwind_CSS-3.x-38B2AC?style=for-the-badge&logo=tailwind-css)
+![Status](https://img.shields.io/badge/Status-Production%20Ready-green?style=for-the-badge)
 
 A comprehensive web application designed to help students and staff at ITS NU Pekalongan report, track, and recover lost or found items on campus. This system provides a user-friendly platform with features tailored to ensure transparency, ethical posting, and efficient item management.
+
+> **🌍 Language Support**: Fully translated to Bahasa Indonesia with responsive UI/UX optimized for Indonesian university environment.
 
 ## 👥 Development Team
 
@@ -24,9 +27,10 @@ As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
 - **Role-Based Access Control** - Different permissions for students and administrators
 
 ### 📍 Location-Based Services
-- **Interactive Campus Map** - Google Maps integration for precise location reporting
+- **Interactive Campus Map** - Leaflet.js with OpenStreetMap/Mapbox integration for precise location reporting
+- **Real-time Marker Display** - Dynamic red/green markers for lost/found items with popup information
 - **Location Clustering** - Efficient visualization of multiple items in close proximity
-- **Geolocation Tracking** - Latitude/longitude coordinates for accurate item placement
+- **Geolocation Tracking** - Latitude/longitude coordinates for accurate item placement with fallback to campus default location
 
 ### 🧾 Item Management
 - **Lost/Found Reporting** - Detailed submission forms with descriptions, photos, and categories
@@ -49,9 +53,10 @@ As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
 - **Real-time Notifications** - Instant updates on claim status changes
 
 ### 🔍 Advanced Search Capabilities
-- **Text Search** - Keyword-based item discovery
-- **Image Recognition** - AI-powered search using Google Vision API
+- **Text Search** - Keyword-based item discovery with Indonesian language support
+- **Image Recognition** - AI-powered search using Google Vision API with robust error handling
 - **Category Filtering** - Filter by item type and status
+- **Visual Item Details** - Enhanced item viewing page with proper image fallbacks
 
 ## 🛠️ Technology Stack
 
@@ -62,10 +67,10 @@ As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
 - **APIs**: Google Maps API, Google Vision API
 
 ### Frontend
-- **Templating**: Blade Templates
-- **Styling**: Tailwind CSS 3.x
-- **JavaScript**: Vanilla JS with modern ES6+ features
-- **Mapping**: Leaflet.js with Google Maps integration
+- **Templating**: Blade Templates with Indonesian language support
+- **Styling**: Tailwind CSS 3.x with custom green theme matching ITS NU Pekalongan branding
+- **JavaScript**: Vanilla JS with modern ES6+ features and comprehensive error handling
+- **Mapping**: Leaflet.js with OpenStreetMap/Mapbox integration and dynamic marker system
 
 ### Development Tools
 - **Environment**: Laragon (Windows)
@@ -79,8 +84,8 @@ As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
 - Composer
 - Node.js >= 16.x
 - NPM >= 8.x
-- Google Maps API Key
-- Google Cloud Vision API Key
+- Mapbox Access Token (optional, fallback to OpenStreetMap)
+- Google Cloud Vision API Key (optional, with graceful fallback)
 
 ## 🚀 Installation Guide
 
@@ -155,6 +160,18 @@ The application provides RESTful endpoints for integration with external systems
 - Session Management
 - Input Validation
 - File Upload Sanitization
+- Enhanced Admin Logging with IP tracking and user agent logging
+
+## 🔧 Recent Updates & Bug Fixes
+
+### ✅ Latest Improvements (Latest Version)
+- **Complete Indonesian Translation** - All user interface elements translated to Bahasa Indonesia
+- **Map Integration Fixed** - Dynamic red/green markers now properly display database items
+- **UI/UX Enhancements** - Fixed navbar overlap, popup positioning, and responsive design issues
+- **Database Error Handling** - Improved error handling for image uploads and API integrations
+- **Admin Panel Improvements** - Fixed image display paths and moderation functionality
+- **Security Enhancements** - Added proper access controls for item deletion and admin logging
+- **Robust Error Handling** - Added fallback mechanisms for API failures and missing data
 
 ## 📊 Database Schema
 
@@ -169,10 +186,11 @@ The system uses a well-structured database with the following main tables:
 ## 🎨 UI/UX Design
 
 The application features a modern, responsive design with:
-- **Cyberpunk-inspired Theme** - Dark mode with vibrant accent colors
+- **Custom Green Theme** - Branded theme matching ITS NU Pekalongan identity
 - **Mobile-first Approach** - Fully responsive for all device sizes
-- **Intuitive Navigation** - User-friendly interface with clear workflows
+- **Intuitive Navigation** - User-friendly interface with clear workflows in Bahasa Indonesia
 - **Accessibility Features** - WCAG-compliant design principles
+- **Fixed Layout Issues** - Proper navbar spacing, map integration, and popup positioning resolved
 
 ## 🤝 Contributing
 

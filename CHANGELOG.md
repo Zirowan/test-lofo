@@ -14,30 +14,31 @@ This project was developed by:
 
 As part of the Final Year Project (FYP) requirement at ITS NU Pekalongan.
 
-## [Unreleased]
+## [Unreleased] - Latest Updates
 
 ### Added
-- API documentation file (API_DOCS.md)
-- Detailed installation guide in README
-- System requirements section
-- Security features documentation
-- Database schema overview
-- UI/UX design principles documentation
-- Contributing guidelines
-- License information
+- Complete Indonesian language translation for all user interface elements
+- Enhanced map marker system with real-time database integration
+- Robust error handling for Google Vision API and Mapbox integration
+- Admin logging enhancements with IP address and user agent tracking
+- Fallback mechanisms for missing API keys and database errors
+- Comprehensive debugging system for map and data transfer issues
 
 ### Changed
-- Complete rebranding from UiTM to ITS NU Pekalongan
-- Updated all email addresses from uitm.edu.my to itsnupkl.ac.id
-- Enhanced README.md with comprehensive documentation
-- Improved project structure documentation
-- Updated default credentials in documentation
+- UI theme updated to green branding matching ITS NU Pekalongan identity
+- Map integration switched to Leaflet.js with OpenStreetMap/Mapbox support
+- Navbar styling and positioning completely redesigned
+- Admin panel interface improved with proper image handling
 
 ### Fixed
-- Corrected all instances of "UiTM" to "ITS NU Pekalongan"
-- Updated email placeholders throughout the application
-- Fixed admin email address in seeder files
-- Corrected repository name in configuration files
+- **Critical Map Issues**: Fixed missing red/green markers on home page map
+- **UI Layout Problems**: Resolved navbar overlap with map and content areas
+- **Database Integration**: Fixed data transfer issues between PHP controller and JavaScript
+- **Image Display**: Corrected image paths in admin panel and item detail pages
+- **Popup Positioning**: Fixed modal popups being covered by navbar
+- **API Error Handling**: Added graceful fallbacks for Google Vision API failures
+- **Security Issues**: Fixed unauthorized delete button access and improved admin moderation
+- **Database Errors**: Resolved array-to-string conversion and SQL parameter binding issues
 
 ## [1.0.0] - 2025-10-14
 
