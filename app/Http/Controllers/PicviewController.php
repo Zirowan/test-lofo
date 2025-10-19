@@ -20,22 +20,23 @@ class PicviewController extends Controller
         $path = url()->current();
         $path_split = explode('/', $path);
         $pic_name = end($path_split);
-        $pic = Item::where('pic', $pic_name)->first();
+        
+        // Find the item by picture name
+        $item = Item::where('pic', $pic_name)->first();
 
-        // If the picture does not exist, redirect back
-        if (!$pic) {
-            return redirect('/home/' . session('student')['username']);
+        // If the picture does not exist, redirect back with error
+        if (!$item) {
+            return redirect('/home/' . session('student')['username'])->withErrors(['Item tidak ditemukan']);
         }
 
-        // Retrieve lost and found items
-        $lostItems = Item::where('status', 'lost')->get();
-        $foundItems = Item::where('status', 'found')->get();
+        // Get the reporter's information
+        $reporter = Student::where('email', $item->from)->first();
 
-        // Store the selected picture in the session
-        session()->put('pic', $pic);
+        // Store the selected item in the session
+        session()->put('pic', $item);
 
-        // Pass all data to the view
-        return view('pic_view', compact('pic', 'lostItems', 'foundItems'));
+        // Pass only the necessary data to the view
+        return view('pic_view', compact('item', 'reporter'));
     }
 
     public function delete()
@@ -50,18 +51,29 @@ class PicviewController extends Controller
         $path_split = explode('/', $path);
         $pic_name = end($path_split);
 
-        // Delete the item with the picture name
-        $pic = Item::where('pic', $pic_name)->delete();
+        // First, get the item to check ownership
+        $item = Item::where('pic', $pic_name)->first();
 
         // If the item is not found, redirect back
-        if (!$pic) {
-            return redirect('/home/' . session('student')['username']);
+        if (!$item) {
+            return redirect('/home/' . session('student')['username'])->withErrors(['Item tidak ditemukan']);
         }
 
-        // Delete the picture file from the disk
-        File::delete('images/' . $pic_name);
+        // Check if the current user is the owner of the item
+        if (session('student')['email'] !== $item->from) {
+            return redirect('/home/' . session('student')['username'])->withErrors(['Anda tidak berhak menghapus item ini']);
+        }
+
+        // Delete the item from database
+        $deleted = $item->delete();
+
+        // Delete the picture file from the disk if it exists
+        $imagePath = public_path('images/' . $pic_name);
+        if (File::exists($imagePath)) {
+            File::delete($imagePath);
+        }
 
         // Redirect back to the student's homepage
-        return redirect('/home/' . session('student')['username']);
+        return redirect('/home/' . session('student')['username'])->with('success', 'Item berhasil dihapus');
     }
 }

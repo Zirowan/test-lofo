@@ -6,8 +6,8 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
 
     <!-- Primary Meta Tags -->
-    <title>🔍 ITS NU Pekalongan Lost & Found Hub | {{ $slot ?? 'Reuniting Students with Belongings' }}</title>
-    <meta name="description" content="Official lost & found platform for ITS NU Pekalongan campuses. Report lost items or claim found belongings across all ITS NU Pekalongan locations in Indonesia.">
+    <title>🔍 ITS NU Pekalongan Temuan & Kehilangan Hub | {{ $slot ?? 'Mempertemukan Mahasiswa dengan Barang Miliknya' }}</title>
+    <meta name="description" content="Platform resmi temuan & kehilangan untuk kampus ITS NU Pekalongan. Laporkan barang hilang atau klaim barang temuan di semua lokasi ITS NU Pekalongan di Indonesia.">
     <meta name="keywords" content="its nu pekalongan lost and found, campus lost items, indonesia student lost property, its nu pekalongan lost items, its nu pekalongan found items, report lost item its nu pekalongan">
     <link rel="canonical" href="{{ url()->current() }}">
 
@@ -32,17 +32,17 @@
 
     <!-- Enhanced Social Metadata -->
     <meta property="og:type" content="website">
-    <meta property="og:site_name" content="ITS NU Pekalongan Lost & Found Hub">
-    <meta property="og:title" content="ITS NU Pekalongan Lost & Found Hub | Reuniting Students with Belongings">
-    <meta property="og:description" content="Official platform for lost and found items across all ITS NU Pekalongan campuses in Indonesia">
+    <meta property="og:site_name" content="ITS NU Pekalongan Temuan & Kehilangan Hub">
+    <meta property="og:title" content="ITS NU Pekalongan Temuan & Kehilangan Hub | Mempertemukan Mahasiswa dengan Barang Miliknya">
+    <meta property="og:description" content="Platform resmi untuk barang temuan dan kehilangan di semua kampus ITS NU Pekalongan di Indonesia">
     <meta property="og:url" content="{{ url()->current() }}">
     <meta property="og:image" content="{{ asset('images/social-preview.jpg') }}">
     <meta property="og:image:alt" content="ITS NU Pekalongan Lost & Found Platform Interface">
 
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:creator" content="@itsnupkl">
-    <meta name="twitter:title" content="ITS NU Pekalongan Lost & Found Hub">
-    <meta name="twitter:description" content="Find lost items or report found belongings across ITS NU Pekalongan campuses">
+    <meta name="twitter:title" content="ITS NU Pekalongan Temuan & Kehilangan Hub">
+    <meta name="twitter:description" content="Temukan barang hilang atau laporkan barang temuan di semua kampus ITS NU Pekalongan">
     <meta name="twitter:image" content="{{ asset('images/social-twitter-preview.jpg') }}">
     <meta name="twitter:image:alt" content="ITS NU Pekalongan Lost & Found Service">
 

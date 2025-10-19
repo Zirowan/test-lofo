@@ -18,29 +18,50 @@ class ImageRecognitionController extends Controller
         $path = $request->file('image')->store('uploads', 'public');
         $imagePath = storage_path("app/public/{$path}");
 
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/vision-key.json'));
-
-        // Create client instance
-        $imageAnnotator = new ImageAnnotatorClient([
-            'credentials' => storage_path('app/vision-key.json'),
-        ]);
-
-        $image = file_get_contents($imagePath);
-        $response = $imageAnnotator->labelDetection($image);
-        $labels = $response->getLabelAnnotations();
-        $imageAnnotator->close();
-
-        $results = [];
-        if ($labels) {
-            foreach ($labels as $label) {
-                $results[] = $label->getDescription();
+        try {
+            // Path to Google Cloud credentials
+            $credentialsPath = storage_path('app/neon-essence-457316-i3-c0efd7d28aaa.json');
+            
+            // Check if credentials file exists
+            if (!file_exists($credentialsPath)) {
+                \Log::warning('Google Vision API credentials file not found: ' . $credentialsPath);
+                return view('image.result', [
+                    'labels' => [],
+                    'image' => $path
+                ]);
             }
-        }
 
-        return view('image.result', [
-            'labels' => $results,
-            'image' => $path
-        ]);
+            putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $credentialsPath);
+
+            // Create client instance
+            $imageAnnotator = new ImageAnnotatorClient([
+                'credentials' => $credentialsPath,
+            ]);
+
+            $image = file_get_contents($imagePath);
+            $response = $imageAnnotator->labelDetection($image);
+            $labels = $response->getLabelAnnotations();
+            $imageAnnotator->close();
+
+            $results = [];
+            if ($labels) {
+                foreach ($labels as $label) {
+                    $results[] = $label->getDescription();
+                }
+            }
+
+            return view('image.result', [
+                'labels' => $results,
+                'image' => $path
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Google Vision API error in recognize: ' . $e->getMessage());
+            return view('image.result', [
+                'labels' => [],
+                'image' => $path
+            ]);
+        }
     }
 
     public function searchByImage(Request $request)
@@ -52,37 +73,59 @@ class ImageRecognitionController extends Controller
         $path = $request->file('vision_image')->store('uploads', 'public');
         $imagePath = storage_path("app/public/{$path}");
 
-        putenv('GOOGLE_APPLICATION_CREDENTIALS=' . storage_path('app/vision-key.json'));
-
-$imageAnnotator = new ImageAnnotatorClient([
-    'credentials' => storage_path('app/neon-essence-457316-i3-c0efd7d28aaa.json'),
-]);
-
-
-        $image = file_get_contents($imagePath);
-        $response = $imageAnnotator->labelDetection($image);
-        $labels = $response->getLabelAnnotations();
-        $imageAnnotator->close();
-
-        $results = [];
-        if ($labels) {
-            foreach ($labels as $label) {
-                $results[] = strtolower($label->getDescription());
+        try {
+            // Path to Google Cloud credentials
+            $credentialsPath = storage_path('app/neon-essence-457316-i3-c0efd7d28aaa.json');
+            
+            // Check if credentials file exists
+            if (!file_exists($credentialsPath)) {
+                \Log::warning('Google Vision API credentials file not found: ' . $credentialsPath);
+                return view('search-results', [
+                    'items' => collect(),
+                    'labels' => [],
+                    'uploadedImage' => $path
+                ]);
             }
-        }
 
-        $items = Item::where('status', '!=', 'Archived')
-            ->where(function ($query) use ($results) {
-                foreach ($results as $label) {
-                    $query->orWhereRaw('LOWER(image_labels) LIKE ?', ["%$label%"]);
+            putenv('GOOGLE_APPLICATION_CREDENTIALS=' . $credentialsPath);
+
+            $imageAnnotator = new ImageAnnotatorClient([
+                'credentials' => $credentialsPath,
+            ]);
+
+            $image = file_get_contents($imagePath);
+            $response = $imageAnnotator->labelDetection($image);
+            $labels = $response->getLabelAnnotations();
+            $imageAnnotator->close();
+
+            $results = [];
+            if ($labels) {
+                foreach ($labels as $label) {
+                    $results[] = strtolower($label->getDescription());
                 }
-            })
-            ->get();
+            }
 
-        return view('search-results', [
-            'items' => $items,
-            'labels' => $results,
-            'uploadedImage' => $path
-        ]);
+            $items = Item::where('status', '!=', 'Archived')
+                ->where(function ($query) use ($results) {
+                    foreach ($results as $label) {
+                        $query->orWhereRaw('LOWER(image_labels) LIKE ?', ["%$label%"]);
+                    }
+                })
+                ->get();
+
+            return view('search-results', [
+                'items' => $items,
+                'labels' => $results,
+                'uploadedImage' => $path
+            ]);
+            
+        } catch (\Exception $e) {
+            \Log::error('Google Vision API error in searchByImage: ' . $e->getMessage());
+            return view('search-results', [
+                'items' => collect(),
+                'labels' => [],
+                'uploadedImage' => $path
+            ]);
+        }
     }
 }

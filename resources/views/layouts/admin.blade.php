@@ -27,8 +27,8 @@
         /* New styles for enhanced design */
         .active-menu-item {
             position: relative;
-            background: linear-gradient(90deg, rgba(99, 102, 241, 0.1) 0%, rgba(99, 102, 241, 0) 100%);
-            color: #6366f1;
+            background: linear-gradient(90deg, rgba(16, 185, 129, 0.1) 0%, rgba(16, 185, 129, 0) 100%);
+            color: #10b981;
             font-weight: 500;
         }
 
@@ -39,7 +39,7 @@
             top: 0;
             bottom: 0;
             width: 4px;
-            background: #6366f1;
+            background: #10b981;
             border-radius: 0 4px 4px 0;
         }
 
@@ -72,7 +72,7 @@
         }
 
         .logo-gradient {
-            background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+            background: linear-gradient(135deg, #10b981 0%, #059669 100%);
             -webkit-background-clip: text;
             background-clip: text;
             color: transparent;
@@ -107,9 +107,9 @@
     <div id="sidebarBackdrop" class="fixed inset-0 bg-black bg-opacity-50 z-40 md:hidden hidden backdrop-blur-sm"></div>
 
     <aside id="adminSidebar" class="bg-white dark:bg-gray-800 shadow-xl w-64 fixed inset-y-0 left-0 transform -translate-x-full md:translate-x-0 transition-transform duration-300 z-50 flex flex-col sidebar-scroll sidebar-transition">
-        <div class="p-4 border-b dark:border-gray-700 flex items-center justify-between bg-gradient-to-r from-indigo-50 to-purple-50 dark:from-gray-700 dark:to-gray-700">
+        <div class="p-4 border-b dark:border-gray-700 flex items-center justify-between bg-gradient-to-r from-emerald-50 to-green-50 dark:from-gray-700 dark:to-gray-700">
             <div class="flex items-center space-x-2">
-                <div class="w-10 h-10 rounded-lg bg-indigo-600 dark:bg-indigo-500 flex items-center justify-center">
+                <div class="w-10 h-10 rounded-lg bg-emerald-600 dark:bg-emerald-500 flex items-center justify-center">
                     <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                         <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m5.618-4.016A11.955 11.955 0 0112 2.944a11.955 11.955 0 01-8.618 3.04A12.02 12.02 0 003 9c0 5.591 3.824 10.29 9 11.622 5.176-1.332 9-6.03 9-11.622 0-1.042-.133-2.052-.382-3.016z"/>
                     </svg>
@@ -117,27 +117,27 @@
                 <span class="text-lg font-bold logo-gradient sidebar-text"> Lost & Found ITS NU Pekalongan</span>
             </div>
             <button id="darkToggle" class="p-2 rounded-full hover:bg-gray-200 dark:hover:bg-gray-600 transition-colors">
-                <i class="fas fa-moon dark:hidden text-indigo-600"></i>
+                <i class="fas fa-moon dark:hidden text-emerald-600"></i>
                 <i class="fas fa-sun hidden dark:block text-yellow-400"></i>
             </button>
         </div>
 
         <nav class="flex-1 mt-2 space-y-0 px-2 overflow-y-auto">
             <a href="{{ route('admin.dashboard') }}" class="flex items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors nav-item @if(Route::is('admin.dashboard')) active-menu-item @endif">
-                <i class="fas fa-tachometer-alt mr-3 w-5 text-center text-indigo-500 dark:text-indigo-400"></i>
+                <i class="fas fa-tachometer-alt mr-3 w-5 text-center text-emerald-500 dark:text-emerald-400"></i>
                 <span class="sidebar-text">Dashboard</span>
             </a>
             <a href="{{ route('admin.moderation') }}" class="flex items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors nav-item @if(Route::is('admin.moderation')) active-menu-item @endif">
-                <i class="fas fa-shield-alt mr-3 w-5 text-center text-indigo-500 dark:text-indigo-400"></i>
-                <span class="sidebar-text">Item Moderation</span>
+                <i class="fas fa-shield-alt mr-3 w-5 text-center text-emerald-500 dark:text-emerald-400"></i>
+                <span class="sidebar-text">Moderasi Barang</span>
             </a>
             <a href="{{ route('admin.claims') }}" class="flex items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors nav-item @if(Route::is('admin.claims')) active-menu-item @endif">
-                <i class="fas fa-handshake mr-3 w-5 text-center text-indigo-500 dark:text-indigo-400"></i>
-                <span class="sidebar-text">Claim Moderation</span>
+                <i class="fas fa-handshake mr-3 w-5 text-center text-emerald-500 dark:text-emerald-400"></i>
+                <span class="sidebar-text">Moderasi Klaim</span>
             </a>
             <a href="{{ route('admin.reports') }}" class="flex items-center py-3 px-4 hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors nav-item @if(Route::is('admin.reports')) active-menu-item @endif">
-                <i class="fas fa-chart-pie mr-3 w-5 text-center text-indigo-500 dark:text-indigo-400"></i>
-                <span class="sidebar-text">Reports</span>
+                <i class="fas fa-chart-pie mr-3 w-5 text-center text-emerald-500 dark:text-emerald-400"></i>
+                <span class="sidebar-text">Laporan</span>
             </a>
 
             <div class="border-t dark:border-gray-700 mt-4 pt-2 px-2">
@@ -145,7 +145,7 @@
                     @csrf
                     <button type="submit" class="w-full flex items-center py-3 px-4 rounded-lg text-gray-700 hover:bg-gray-100 dark:text-gray-300 dark:hover:bg-gray-700 transition-colors">
                         <i class="fas fa-sign-out-alt mr-3 w-5 text-center"></i>
-                        <span class="sidebar-text">Logout</span>
+                        <span class="sidebar-text">Keluar</span>
                     </button>
                 </form>
             </div>
@@ -162,12 +162,12 @@
     <div class="flex-1 md:ml-64 transition-all duration-300" id="contentWrapper">
         <header class="sticky top-0 z-40 flex items-center justify-between px-6 py-4 bg-white/80 dark:bg-gray-800/80 backdrop-blur-sm header-shadow">
             <button id="unifiedSidebarToggle" class="p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700 transition-colors">
-                <i class="fas fa-bars text-xl text-indigo-600 dark:text-indigo-400"></i>
+                <i class="fas fa-bars text-xl text-emerald-600 dark:text-emerald-400"></i>
             </button>
             <h1 class="font-semibold text-xl text-gray-800 dark:text-gray-200">@yield('title', 'Dashboard')</h1>
             <div class="flex items-center space-x-4">
-                <div class="w-10 h-10 rounded-full bg-indigo-100 dark:bg-indigo-900 flex items-center justify-center">
-                    <span class="font-medium text-indigo-700 dark:text-indigo-300">AD</span>
+                <div class="w-10 h-10 rounded-full bg-emerald-100 dark:bg-emerald-900 flex items-center justify-center">
+                    <span class="font-medium text-emerald-700 dark:text-emerald-300">AD</span>
                 </div>
             </div>
         </header>

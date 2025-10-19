@@ -1,11 +1,46 @@
 <x-header>Claims</x-header>
+
+<style>
+    /* Navbar spacing fix */
+    .clear-navbar-space {
+        height: 14rem; /* Increased spacing to prevent wave overlap */
+    }
+    
+    @media (min-width: 768px) {
+        .clear-navbar-space {
+            height: 10rem; /* Even more spacing on larger screens */
+        }
+    }
+    
+    /* Ensure navbar doesn't overlap content */
+    .fixed.top-0 {
+        z-index: 1000 !important;
+    }
+    
+    /* Fix for info component navbar */
+    .z-50 {
+        z-index: 1000 !important;
+    }
+    
+    /* Additional protection for title section */
+    .title-section {
+        margin-top: 3rem;
+        padding-top: 2rem;
+        position: relative;
+        z-index: 20;
+    }
+</style>
+
+<!-- Clear div to ensure proper spacing after fixed navbar -->
+<div class="clear-navbar-space"></div>
+
 <body class="bg-gradient-to-br from-gray-50 to-gray-100 p-6 min-h-screen">
     <div class="max-w-4xl mx-auto">
         <x-info><x-icon></x-icon></x-info>
 
-        <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-gray-800 mb-2">Claim Information</h1>
-            <p class="text-gray-600">Manage your item claims and communications</p>
+        <div class="text-center mb-8 title-section">
+            <h1 class="text-3xl font-bold text-gray-800 mb-2">Informasi Klaim</h1>
+            <p class="text-gray-600">Kelola klaim barang dan komunikasi Anda</p>
         </div>
 
         @php
@@ -57,27 +92,27 @@
                 <div class="flex-1">
                     <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
                         <div>
-                            <h3 class="text-gray-500 text-sm font-medium">Item ID</h3>
+                            <h3 class="text-gray-500 text-sm font-medium">ID Barang</h3>
                             <p class="font-mono font-medium">{{ $claim->item_id ?? '-' }}</p>
                         </div>
                         <div>
                             <h3 class="text-gray-500 text-sm font-medium">Status</h3>
                             <p class="font-medium">
                                 @if($authStudent && $claimedBy && $authStudent->id == $claimedBy->id)
-                                    You claimed this item
+                                    Anda mengklaim barang ini
                                 @elseif($authStudent && $claimedTo && $authStudent->id == $claimedTo->id)
-                                    Claimed from you
+                                    Diklaim dari Anda
                                 @else
-                                    <span class="text-amber-600">Status unknown</span>
+                                    <span class="text-amber-600">Status tidak diketahui</span>
                                 @endif
                             </p>
                         </div>
                         <div>
-                            <h3 class="text-gray-500 text-sm font-medium">Claimed By</h3>
+                            <h3 class="text-gray-500 text-sm font-medium">Diklaim Oleh</h3>
                             <p class="text-sm truncate">{{ $claimedBy->email ?? '-' }}</p>
                         </div>
                         <div>
-                            <h3 class="text-gray-500 text-sm font-medium">Claimed To</h3>
+                            <h3 class="text-gray-500 text-sm font-medium">Diklaim Kepada</h3>
                             <p class="text-sm truncate">{{ $claimedTo->email ?? '-' }}</p>
                         </div>
                     </div>
@@ -89,7 +124,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z" />
                                 </svg>
-                                <span>Open Chat</span>
+                                <span>Buka Chat</span>
                                 @if($unreadCount > 0)
                                     <span class="ml-2 bg-rose-500 text-white text-xs font-bold h-6 w-6 rounded-full flex items-center justify-center">
                                         {{ $unreadCount }}
@@ -101,7 +136,7 @@
                                 <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 mr-1" fill="none" viewBox="0 0 24 24" stroke="currentColor">
                                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 9v2m0 4h.01m-6.938 4h13.856c1.54 0 2.502-1.667 1.732-3L13.732 4c-.77-1.333-2.694-1.333-3.464 0L3.34 16c-.77 1.333.192 3 1.732 3z" />
                                 </svg>
-                                Chat unavailable
+                                Chat tidak tersedia
                             </span>
                         @endif
                     </div>
@@ -115,8 +150,8 @@
                     <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12h6m-6 4h6m2 5H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z" />
                 </svg>
             </div>
-            <h2 class="text-2xl font-semibold text-gray-700 mb-2">No Claims Found</h2>
-            <p class="text-gray-500 max-w-md mx-auto">You don't have any active claims at this time. When claims are made, they'll appear here.</p>
+            <h2 class="text-2xl font-semibold text-gray-700 mb-2">Tidak Ada Klaim Ditemukan</h2>
+            <p class="text-gray-500 max-w-md mx-auto">Anda tidak memiliki klaim aktif saat ini. Ketika klaim dibuat, mereka akan muncul di sini.</p>
         </div>
         @endforelse
     </div>

@@ -24,15 +24,21 @@ class HomeController extends Controller
      */
     public function index($username)
     {
+        \Log::info("DEBUG: HomeController@index called with username: " . $username);
+        
         if (! Session::has('student')) {
+            \Log::warning("DEBUG: No student session, redirecting to login");
             return redirect('/');
         }
 
         $student = Session::get('student');
         if (! $student || ! isset($student['email'])) {
+            \Log::warning("DEBUG: Invalid student session, redirecting to login");
             return redirect('/')
                 ->withErrors('Session expired or corrupted. Please log in again.');
         }
+        
+        \Log::info("DEBUG: Student session valid: " . $student['email']);
 
         $studentModel = Student::where('username', $username)->firstOrFail();
 
@@ -46,13 +52,72 @@ class HomeController extends Controller
         // Combine lost and found items into one collection for the view
         $items = $foundItems->merge($lostItems);
 
-        $mapItems = Item::whereNotNull('latitude')
-                        ->whereNotNull('longitude')
-                        ->get();
+        // Get ALL items for the map - show everything for now
+        $allItems = Item::all(); // Get absolutely everything
         
-        // Debug: Log map items count
-        \Log::info('Map items count: ' . $mapItems->count());
+        // Debug: Log what we have in database
+        \Log::info("DEBUG: Total items in database: " . $allItems->count());
+        
+        // Log first few items directly
+        if ($allItems->count() > 0) {
+            foreach ($allItems->take(3) as $index => $item) {
+                \Log::info("DEBUG: Item {$index} - ID: {$item->id}, Type: {$item->type}, Description: {$item->description}, Status: {$item->status}, Lat: " . ($item->latitude ?? 'NULL') . ", Lng: " . ($item->longitude ?? 'NULL'));
+            }
+        } else {
+            \Log::warning("DEBUG: NO ITEMS FOUND IN DATABASE AT ALL!");
+        }
+        
+        // Let's also check what statuses exist
+        $statuses = Item::select('status')->distinct()->pluck('status')->toArray();
+        \Log::info("DEBUG: Item statuses found: " . implode(', ', $statuses));
+        
+        \Log::info("DEBUG: Using ALL items count: " . $allItems->count());
+        
+        // Process items for map - show ALL items regardless of coordinates
+        $mapItems = $allItems->map(function ($item) {
+            $itemData = [
+                'id' => $item->id,
+                'description' => $item->description ?? 'No description',
+                'type' => $item->type ?? 'unknown',
+                'pic' => $item->pic ?? '',
+                'created_at' => $item->created_at ? $item->created_at->toISOString() : null,
+                'status' => $item->status ?? 'unknown',
+                'latitude' => null,
+                'longitude' => null,
+                'has_default_location' => false
+            ];
+            
+            // Always provide coordinates - use actual if available, default if not
+            if (!is_null($item->latitude) && !is_null($item->longitude) 
+                && $item->latitude != 0 && $item->longitude != 0
+                && is_numeric($item->latitude) && is_numeric($item->longitude)) {
+                $itemData['latitude'] = floatval($item->latitude);
+                $itemData['longitude'] = floatval($item->longitude);
+                $itemData['has_default_location'] = false;
+            } else {
+                // Use default campus location for items without coordinates
+                $itemData['latitude'] = -6.9606152;
+                $itemData['longitude'] = 109.6386821;
+                $itemData['has_default_location'] = true;
+            }
+            
+            return $itemData;
+        })->toArray();
+        
+        // Debug final result
+        \Log::info("DEBUG FINAL: Map items prepared: " . count($mapItems));
+        if (count($mapItems) > 0) {
+            \Log::info("DEBUG: First real item: " . json_encode($mapItems[0]));
+            \Log::info("DEBUG: Total mapItems array count: " . count($mapItems));
+            \Log::info("DEBUG: All mapItems data: " . json_encode(array_slice($mapItems, 0, 3))); // Log first 3 items
+        } else {
+            \Log::warning("NO ITEMS FOUND IN DATABASE - mapItems is empty!");
+            \Log::info("This means there are no items in the items table to display on the map.");
+        }
 
+        \Log::info("DEBUG: About to return view with mapItems count: " . count($mapItems));
+        \Log::info("DEBUG: mapItems data being sent to view: " . json_encode(array_slice($mapItems, 0, 2))); // Log first 2 items
+        
         return view('home', compact(
             'studentModel',
             'lostItems',
@@ -96,30 +161,32 @@ class HomeController extends Controller
 
         // Run image recognition with Google Vision API
         $imageLabels = $this->recognizeImage(public_path("images/{$filename}"));
+        
+        // Ensure $imageLabels is always an array
+        if (!is_array($imageLabels)) {
+            $imageLabels = [];
+        }
 
-        // Prepare data array for insertion
-        $data = [
-            'from'            => $student['email'],
-            'description'     => $request->description,
-            'pic'             => $filename,
-            'type'            => $request->type,
-            'status'          => 'Unresolved',
-            'image_labels'    => $imageLabels,
-            'selected_label'  => null,               // newly added column stays null for now
-            'latitude'        => $request->latitude,
-            'longitude'       => $request->longitude,
-            'created_at'      => now(),
-            'updated_at'      => now(),
-        ];
+        // Create new item using mass assignment with proper data validation
+        $newItem = Item::create([
+            'from' => $student['email'],
+            'description' => $request->description,
+            'pic' => $filename,
+            'type' => $request->type,
+            'status' => 'Unresolved',
+            'image_labels' => $imageLabels, // Will be automatically cast to JSON
+            'selected_label' => null,
+            'latitude' => $request->latitude ? (float) $request->latitude : null,
+            'longitude' => $request->longitude ? (float) $request->longitude : null,
+        ]);
 
-        // Use insertGetId to ensure we retrieve the actual auto-increment ID
-        $newItemId = Item::insertGetId($data);
+        $newItemId = $newItem->id;
 
-        // Redirect back, flashing both the labels and the new item’s ID
+        // Redirect back, flashing both the labels and the new item's ID
         return redirect()
             ->route('home.index', ['username' => $username])
             ->with([
-                'image_labels' => json_encode($imageLabels),
+                'image_labels' => $imageLabels, // Store as array, Laravel will handle serialization
                 'last_item_id' => $newItemId,
             ]);
     }
@@ -129,29 +196,44 @@ class HomeController extends Controller
      */
     private function recognizeImage(string $imagePath): array
 {
-    $client = new ImageAnnotatorClient([
-        'credentials' => storage_path('app/neon-essence-457316-i3-c0efd7d28aaa.json'),
-    ]);
-
-    $visionImage = (new Image())->setContent(file_get_contents($imagePath));
-    $feature     = (new Feature())->setType(FeatureType::LABEL_DETECTION);
-
-    $req = (new AnnotateImageRequest())
-        ->setImage($visionImage)
-        ->setFeatures([$feature]);
-
-    $batchRes  = $client->batchAnnotateImages([$req]);
-    $responses = $batchRes->getResponses();
-
-    $labels = [];
-    if (isset($responses[0])) {
-        foreach ($responses[0]->getLabelAnnotations() as $label) {
-            $labels[] = $label->getDescription();
+    try {
+        // Path to Google Cloud credentials
+        $credentialsPath = storage_path('app/neon-essence-457316-i3-c0efd7d28aaa.json');
+        
+        // Check if credentials file exists
+        if (!file_exists($credentialsPath)) {
+            \Log::warning('Google Vision API credentials file not found: ' . $credentialsPath);
+            return []; // Return empty array instead of throwing error
         }
-    }
 
-    $client->close();
-    return $labels;
+        $client = new ImageAnnotatorClient([
+            'credentials' => $credentialsPath,
+        ]);
+
+        $visionImage = (new Image())->setContent(file_get_contents($imagePath));
+        $feature     = (new Feature())->setType(FeatureType::LABEL_DETECTION);
+
+        $req = (new AnnotateImageRequest())
+            ->setImage($visionImage)
+            ->setFeatures([$feature]);
+
+        $batchRes  = $client->batchAnnotateImages([$req]);
+        $responses = $batchRes->getResponses();
+
+        $labels = [];
+        if (isset($responses[0])) {
+            foreach ($responses[0]->getLabelAnnotations() as $label) {
+                $labels[] = $label->getDescription();
+            }
+        }
+
+        $client->close();
+        return $labels;
+        
+    } catch (\Exception $e) {
+        \Log::error('Google Vision API error: ' . $e->getMessage());
+        return []; // Return empty array on error to prevent app crash
+    }
 }
 
 

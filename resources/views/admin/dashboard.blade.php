@@ -25,7 +25,7 @@
         <div class="bg-gradient-to-br from-indigo-500 to-purple-600 p-6 rounded-xl shadow-xl text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm opacity-90">Total Lost Items</p>
+                    <p class="text-sm opacity-90">Total Barang Hilang</p>
                     <p class="text-4xl font-bold mt-2">{{ $totalLostItems }}</p>
                 </div>
                 <div class="bg-white/10 p-4 rounded-full"><i class="fas fa-bell text-2xl"></i></div>
@@ -35,7 +35,7 @@
         <div class="bg-gradient-to-br from-green-500 to-emerald-600 p-6 rounded-xl shadow-xl text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm opacity-90">Total Found Items</p>
+                    <p class="text-sm opacity-90">Total Barang Temuan</p>
                     <p class="text-4xl font-bold mt-2">{{ $totalFoundItems }}</p>
                 </div>
                 <div class="bg-white/10 p-4 rounded-full"><i class="fas fa-search text-2xl"></i></div>
@@ -45,7 +45,7 @@
         <div class="bg-gradient-to-br from-blue-500 to-cyan-600 p-6 rounded-xl shadow-xl text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm opacity-90">Registered Users</p>
+                    <p class="text-sm opacity-90">Pengguna Terdaftar</p>
                     <p class="text-4xl font-bold mt-2">{{ $totalUsers }}</p>
                 </div>
                 <div class="bg-white/10 p-4 rounded-full"><i class="fas fa-users text-2xl"></i></div>
@@ -58,8 +58,8 @@
         <div class="bg-gradient-to-br from-gray-500 to-gray-700 p-6 rounded-xl shadow-xl text-white">
             <div class="flex items-center justify-between">
                 <div>
-                    <p class="text-sm opacity-90">System Health</p>
-                    <p class="text-4xl font-bold mt-2">All Systems Operational</p>
+                    <p class="text-sm opacity-90">Kesehatan Sistem</p>
+                    <p class="text-4xl font-bold mt-2">Semua Sistem Beroperasi</p>
                 </div>
                 <div class="bg-white/10 p-4 rounded-full"><i class="fas fa-heartbeat text-2xl"></i></div>
             </div>
@@ -70,7 +70,7 @@
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gray-50 px-6 py-4 border-b">
             <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <i class="fas fa-chart-pie text-indigo-600"></i> Item Type Breakdown
+                <i class="fas fa-chart-pie text-indigo-600"></i> Rincian Jenis Barang
             </h2>
         </div>
      <div class="p-6 flex justify-center">

@@ -27,9 +27,18 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             @foreach($claims as $claim)
                 <div class="bg-white dark:bg-gray-800 rounded-xl shadow-lg p-4 space-y-3">
-                    <img src="{{ asset('storage/uploads/' . $claim->item->pic) }}"
+                    <img src="{{ asset('images/' . $claim->item->pic) }}"
                       alt="Item Image"
-                     class="w-full h-48 object-contain rounded" />
+                     class="w-full h-48 object-contain rounded"
+                     onerror="this.style.display='none'; this.nextElementSibling.style.display='block';" />
+                    <div style="display:none;" class="w-full h-48 bg-gray-200 border border-dashed border-gray-400 rounded flex items-center justify-center">
+                        <div class="text-center text-gray-500">
+                            <svg class="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                            </svg>
+                            <p class="text-sm">Gambar tidak tersedia</p>
+                        </div>
+                    </div>
 
                     <div class="text-sm dark:text-gray-200">
                         <p><strong>Item:</strong> {{ $claim->item->description ?? 'N/A' }}</p>

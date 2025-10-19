@@ -86,20 +86,7 @@ class AdminController extends Controller
         $item = Item::findOrFail($request->item_id);
         $adminId = Auth::guard('admin')->id();
 
-        switch ($request->action) {
-            case 'approve':
-                $item->status = 'approved';
-                break;
-            case 'flag':
-                $item->status = 'flagged';
-                break;
-            case 'delete':
-                $item->delete();
-                break;
-        }
-
-        $item->save();
-
+        // Create log before any action
         AdminLog::create([
             'admin_id' => $adminId,
             'item_id' => $item->id,
@@ -107,6 +94,21 @@ class AdminController extends Controller
             'ip_address' => $request->ip(),
             'user_agent' => $request->userAgent()
         ]);
+
+        // Perform the action
+        switch ($request->action) {
+            case 'approve':
+                $item->status = 'approved';
+                $item->save();
+                break;
+            case 'flag':
+                $item->status = 'flagged';
+                $item->save();
+                break;
+            case 'delete':
+                $item->delete();
+                break;
+        }
 
         return redirect()->back()->with('status', 'Item ' . $request->action . ' successfully.');
     }
@@ -152,7 +154,7 @@ class AdminController extends Controller
             'id' => $item->id,
             'type' => $item->type,
             'description' => $item->description,
-            'image' => asset('storage/' . $item->pic),
+            'image' => asset('images/' . $item->pic),
             'created_at' => $item->created_at->diffForHumans(),
             'is_approved' => $item->is_approved ?? null,
             'is_flagged' => $item->is_flagged ?? null,

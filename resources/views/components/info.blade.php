@@ -1,5 +1,5 @@
 <div class="fixed top-0 left-0 w-full z-50 shadow-lg">
-    <div class="relative overflow-hidden bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 py-4 md:py-6">
+    <div class="relative overflow-hidden py-4 md:py-6" style="background: linear-gradient(135deg, #065f46, #047857) !important;">
         <!-- Background Elements -->
         <div class="absolute inset-0 overflow-hidden z-0">
             <!-- Watermark Logo -->
@@ -12,15 +12,15 @@
             <!-- Animated Circles -->
             <div class="absolute w-full h-full opacity-10">
                 <div class="absolute top-1/4 left-1/5 w-16 h-16 rounded-full bg-yellow-400 blur-xl animate-float1"></div>
-                <div class="absolute top-1/3 right-1/4 w-28 h-28 rounded-full bg-blue-600 blur-xl animate-float2"></div>
+                <div class="absolute top-1/3 right-1/4 w-28 h-28 rounded-full bg-emerald-600 blur-xl animate-float2"></div>
                 <div class="absolute bottom-1/4 left-1/3 w-20 h-20 rounded-full bg-red-500 blur-xl animate-float3"></div>
             </div>
         </div>
 
         <!-- Header Content -->
-        <div class="relative z-10 container mx-auto px-4 flex items-center justify-between">
+        <div class="relative z-10 container mx-auto px-6 md:px-8 flex items-center justify-between">
             <!-- Left Logo -->
-            <div class="flex-shrink-0 mr-4">
+            <div class="flex-shrink-0 mr-4 ml-4 md:ml-8">
                 <div class="bg-white/10 backdrop-blur-sm rounded-full p-2 border border-white/20">
                     <img src="\images\uitmlogo.png" alt="ITS NU Pekalongan Logo" class="h-16 w-auto">
                 </div>
@@ -33,11 +33,11 @@
                         Lost & Found
                     </span>
                 </h1>
-                <p class="text-lg md:text-xl text-blue-200 font-medium animate-slideUp">
+                <p class="text-lg md:text-xl text-emerald-200 font-medium animate-slideUp">
                     ITS NU Pekalongan
                 </p>
 
-                <div class="mt-2 text-base text-blue-100 font-medium max-w-2xl mx-auto animate-slideUp">
+                <div class="mt-2 text-base text-emerald-100 font-medium max-w-2xl mx-auto animate-slideUp">
                     {{ $slot }}
                 </div>
 

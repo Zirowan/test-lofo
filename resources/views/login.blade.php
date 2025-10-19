@@ -270,13 +270,13 @@
     <div class="flex items-center space-x-3">
       <img src="images/uitmlogo.png"
            alt="ITS NU Pekalongan Logo" class="logo h-28 w-auto"/>
-      <span class="text-white font-bold text-lg hidden sm:inline">ITS NU Pekalongan Lost & Found</span>
+      <span class="text-white font-bold text-lg hidden sm:inline">ITS NU Pekalongan Temuan & Kehilangan</span>
     </div>
 
     <!-- FAQ and Login Buttons -->
     <div class="nav-buttons">
       <button onclick="openModal('faqModal')" class="neon-btn faq-btn">
-        <i class="fas fa-question-circle mr-2"></i>FAQ
+        <i class="fas fa-question-circle mr-2"></i>Tanya Jawab
       </button>
       <button onclick="openModal('loginModal')" class="neon-btn login-btn">
         <i class="fas fa-sign-in-alt mr-2"></i>Login
@@ -292,10 +292,10 @@
     <div class="absolute inset-0 bg-gradient-to-br from-green-900/50 via-green-800/40 to-black/70 z-[-1]"></div>
     <div class="px-6 max-w-4xl">
       <h1 class="text-5xl md:text-6xl font-bold text-white header-text leading-tight drop-shadow-lg">
-      ITS NU Pekalongan Lost & Found
+      ITS NU Pekalongan Temuan & Kehilangan
       </h1>
       <p class="mt-4 text-xl text-green-200 italic">
-        Connecting the lost items to their rightful owners.
+        Menghubungkan barang hilang dengan pemilik yang berhak.
       </p>
 
 
@@ -310,8 +310,8 @@
     <div class="modal-content relative">
       <span class="close-btn" onclick="closeModals()">&times;</span>
       <div class="text-center">
-        <h2 class="text-2xl text-green-400">Login</h2>
-        <p class="text-green-200 mt-2 mb-4">Please enter your credentials</p>
+        <h2 class="text-2xl text-green-400">Masuk</h2>
+        <p class="text-green-200 mt-2 mb-4">Silakan masukkan kredensial Anda</p>
       </div>
       <form action="{{ route('login.perform') }}" method="post" class="space-y-6">
         @csrf
@@ -321,15 +321,15 @@
         </div>
         <div>
           <label class="block text-sm text-green-200/90">Password</label>
-          <input class="w-full px-4 py-3 rounded-lg cyber-input" type="password" name="password" placeholder="Enter your password" required autocomplete="current-password">
+          <input class="w-full px-4 py-3 rounded-lg cyber-input" type="password" name="password" placeholder="Masukkan kata sandi Anda" required autocomplete="current-password">
         </div>
         <button type="submit" class="w-full py-3 px-4 rounded-lg font-medium neon-btn text-white">
-          Login
+          Masuk
         </button>
       </form>
       <div class="mt-4 text-sm text-center">
-        <span>Don't have an account? </span>
-        <a href="/register" class="text-green-300 hover:text-green-400">Register here</a>
+        <span>Belum memiliki akun? </span>
+        <a href="/register" class="text-green-300 hover:text-green-400">Daftar di sini</a>
       </div>
     </div>
   </div>
@@ -338,54 +338,54 @@
   <div id="faqModal" class="modal">
     <div class="modal-content relative">
       <span class="close-btn" onclick="closeModals()">&times;</span>
-      <h2 class="faq-title">Frequently Asked Questions</h2>
+      <h2 class="faq-title">Pertanyaan yang Sering Diajukan</h2>
 
       <div class="faq-container">
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFAQAnswer(this)">
-            <span>How do I reset my password?</span>
+            <span>Bagaimana cara mengatur ulang kata sandi saya?</span>
             <i class="fas fa-chevron-down faq-toggle"></i>
           </div>
           <div class="faq-answer">
-            <p>If you've forgotten your password, click on the "Forgot Password" link on the login page. You'll receive password reset instructions via your registered email address.</p>
+            <p>Jika Anda lupa kata sandi, klik tautan "Lupa Kata Sandi" di halaman login. Anda akan menerima instruksi pengaturan ulang kata sandi melalui alamat email terdaftar Anda.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFAQAnswer(this)">
-            <span>Who can use the Lost & Found service?</span>
+            <span>Siapa yang bisa menggunakan layanan Temuan & Kehilangan?</span>
             <i class="fas fa-chevron-down faq-toggle"></i>
           </div>
           <div class="faq-answer">
-            <p>This service is available to all ITS NU Pekalongan students, staff, and faculty members. You need a valid ITS NU Pekalongan email address to register and use the system.</p>
+            <p>Layanan ini tersedia untuk semua mahasiswa, staf, dan anggota fakultas ITS NU Pekalongan. Anda memerlukan alamat email ITS NU Pekalongan yang valid untuk mendaftar dan menggunakan sistem.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFAQAnswer(this)">
-            <span>What should I do if I found an item?</span>
+            <span>Apa yang harus saya lakukan jika saya menemukan barang?</span>
             <i class="fas fa-chevron-down faq-toggle"></i>
           </div>
           <div class="faq-answer">
-            <p>Log in to your account and click "Report Found Item". Provide details about the item and where you found it. The system will notify potential owners and campus security.</p>
+            <p>Masuk ke akun Anda dan klik "Laporkan Barang Temuan". Berikan detail tentang barang dan tempat Anda menemukannya. Sistem akan memberitahu pemilik yang berpotensi dan keamanan kampus.</p>
           </div>
         </div>
 
         <div class="faq-item">
           <div class="faq-question" onclick="toggleFAQAnswer(this)">
-            <span>How long are items kept at lost & found?</span>
+            <span>Berapa lama barang disimpan di tempat temuan & kehilangan?</span>
             <i class="fas fa-chevron-down faq-toggle"></i>
           </div>
           <div class="faq-answer">
-            <p>Found items are kept for 30 days at campus security offices. After this period, unclaimed items may be donated to charity or disposed of according to university policy.</p>
+            <p>Barang temuan disimpan selama 30 hari di kantor keamanan kampus. Setelah periode ini, barang yang tidak diambil dapat disumbangkan kepada amal atau dibuang sesuai kebijakan universitas.</p>
           </div>
         </div>
       </div>
 
       <div class="mt-8 text-center">
-        <p class="text-green-200">Still have questions? Contact campus security:</p>
+        <p class="text-green-200">Masih ada pertanyaan? Hubungi keamanan kampus:</p>
         <p class="text-green-300 mt-2">
-          <i class="fas fa-phone mr-2"></i>+603-5544 2000<br>
+          <i class="fas fa-phone mr-2"></i>+6285931564236<br>
           <i class="fas fa-envelope mr-2 mt-2"></i>security@itsnupkl.ac.id
         </p>
       </div>
@@ -394,7 +394,7 @@
 
   <!-- Footer -->
   <footer>
-    <p class="text-sm text-white">© 2025 ITS NU Pekalongan. All rights reserved.</p>
+    <p class="text-sm text-white">© 2025 ITS NU Pekalongan. Semua hak dilindungi.</p>
   </footer>
 
   <script>

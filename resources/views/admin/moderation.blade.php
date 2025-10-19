@@ -6,7 +6,7 @@
     <div class="bg-white rounded-2xl shadow-xl overflow-hidden">
         <div class="bg-gray-50 px-6 py-4 border-b">
             <h2 class="text-xl font-semibold text-gray-800 flex items-center gap-2">
-                <i class="fas fa-shield-alt text-indigo-600"></i> Item Moderation Panel
+                <i class="fas fa-shield-alt text-indigo-600"></i> Panel Moderasi Barang
             </h2>
         </div>
 
@@ -15,16 +15,16 @@
 
             {{-- Select Item --}}
             <div>
-                <label class="block font-medium text-gray-700">Select Item</label>
+                <label class="block font-medium text-gray-700">Pilih Barang</label>
                 <select name="item_id" id="item_id" onchange="showItemDetails(this)"
                         class="w-full mt-2 border px-4 py-2 rounded-lg">
-                    <option value="">-- Select Item --</option>
+                    <option value="">-- Pilih Barang --</option>
                     @foreach($allItems as $item)
                         <option value="{{ $item->id }}"
-                                data-image="{{ asset('storage/' . $item->pic) }}"
+                                data-image="{{ asset('images/' . $item->pic) }}"
                                 data-type="{{ $item->type }}"
                                 data-description="{{ $item->description }}"
-                                data-location="{{ $item->location }}"
+                                data-location="{{ $item->latitude ? number_format($item->latitude, 4) . ', ' . number_format($item->longitude, 4) : 'Tidak ada' }}"
                                 data-created="{{ $item->created_at->format('Y-m-d H:i') }}">
                             {{ $item->description }} - {{ ucfirst($item->type) }}
                         </option>
@@ -34,30 +34,42 @@
 
             {{-- Action --}}
             <div>
-                <label class="block font-medium text-gray-700">Moderation Action</label>
+                <label class="block font-medium text-gray-700">Aksi Moderasi</label>
                 <select name="action" class="w-full mt-2 border px-4 py-2 rounded-lg">
-                    <option value="">-- Select Action --</option>
-                    <option value="approve">✓ Approve Item</option>
-                    <option value="flag">⚠ Flag as Unethical</option>
-                    <option value="delete">✗ Delete Permanently</option>
+                    <option value="">-- Pilih Aksi --</option>
+                    <option value="approve">✓ Setujui Barang</option>
+                    <option value="flag">⚠ Tandai sebagai Tidak Etis</option>
+                    <option value="delete">✗ Hapus Permanen</option>
                 </select>
             </div>
 
             {{-- Preview --}}
             <div id="itemPreview" class="hidden bg-gray-50 border rounded-lg p-4 shadow space-y-3">
                 <div class="flex justify-center">
-                    <img id="itemImage" src="" class="max-w-xs rounded-lg border shadow-md">
+                    <div id="imageContainer" class="relative">
+                        <img id="itemImage" src="" class="max-w-xs rounded-lg border shadow-md" 
+                             onerror="this.style.display='none'; this.nextElementSibling.style.display='block';"
+                             onload="this.style.display='block'; this.nextElementSibling.style.display='none';">
+                        <div id="imagePlaceholder" style="display:none;" class="max-w-xs h-48 bg-gray-200 border border-dashed border-gray-400 rounded-lg flex items-center justify-center">
+                            <div class="text-center text-gray-500">
+                                <svg class="w-12 h-12 mx-auto mb-2" fill="currentColor" viewBox="0 0 20 20">
+                                    <path fill-rule="evenodd" d="M4 3a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V5a2 2 0 00-2-2H4zm12 12H4l4-8 3 6 2-4 3 6z" clip-rule="evenodd"></path>
+                                </svg>
+                                <p class="text-sm">Gambar tidak tersedia</p>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="text-sm text-gray-700 space-y-1">
-                    <p><strong>Type:</strong> <span id="itemType"></span></p>
-                    <p><strong>Description:</strong> <span id="itemDescription"></span></p>
-                    <p><strong>Location:</strong> <span id="itemLocation"></span></p>
-                    <p><strong>Reported At:</strong> <span id="itemCreated"></span></p>
+                    <p><strong>Jenis:</strong> <span id="itemType"></span></p>
+                    <p><strong>Deskripsi:</strong> <span id="itemDescription"></span></p>
+                    <p><strong>Lokasi:</strong> <span id="itemLocation"></span></p>
+                    <p><strong>Dilaporkan pada:</strong> <span id="itemCreated"></span></p>
                 </div>
             </div>
 
             <button type="submit" class="bg-indigo-600 hover:bg-indigo-700 text-white px-6 py-3 rounded-lg w-full">
-                Execute Moderation
+                Jalankan Moderasi
             </button>
         </form>
     </div>

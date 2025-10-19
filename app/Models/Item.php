@@ -19,11 +19,13 @@ class Item extends Model
         'latitude',
         'longitude',
         'reason',
-        'image_labels' // Include image labels for storing the recognized labels
+        'image_labels', // Include image labels for storing the recognized labels
+        'selected_label'
     ];
     protected $casts = [
-    'ai_labels' => 'array',
-];
+        'ai_labels' => 'array',
+        'image_labels' => 'array', // Cast JSON column to array
+    ];
 
 
     public function itemOfStudent()
